@@ -15,20 +15,22 @@ var gLocs = [
     { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
 ]
 
-function getSearchLoc(searchVal){
-    const API_KEY='AIzaSyAyXEvAzKdfmY-a06sPP8K9CECxLBYaO_o';
+function getSearchLoc(searchVal) {
+    const API_KEY = 'AIzaSyAyXEvAzKdfmY-a06sPP8K9CECxLBYaO_o';
     var prm = axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${searchVal}&key=${API_KEY}`)
-    return prm.then(res=> res.data['results'][0])
-    .then(loc => 
-        loc['geometry'])
-    .then(res => {
-        return res['location']
-    })
-} 
+    return prm.then(res => res.data['results'][0])
+        .then(loc =>
+            loc['geometry'])
+        .then(res => {
+            return res['location']
+        })
+}
 
 function addLocToTable(la, lo) {
+    const API_KEY = 'AIzaSyAyXEvAzKdfmY-a06sPP8K9CECxLBYaO_o'
+    console.log(lo);
     var locs = storeService.loadFromStorage(KEY);
-    var prm = axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${la},${lo}&key=AIzaSyAyXEvAzKdfmY-a06sPP8K9CECxLBYaO_o`)
+    var prm = axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${la},${lo}&key=${API_KEY}`)
     prm.then(res => {
         console.log('you are here->', res.data);
         var loc = _prepareData(res.data, la, lo);
@@ -37,6 +39,9 @@ function addLocToTable(la, lo) {
         storeService.saveToStorage(KEY, gLocs);
         return gLocs;
     })
+        .catch(res => {
+            console.log(res + ' youre here!');
+        })
 }
 
 function _prepareData(jsonLoc, la, lo) {

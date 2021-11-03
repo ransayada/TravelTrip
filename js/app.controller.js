@@ -114,12 +114,11 @@ function onGo() {
     var inpVal = document.querySelector('.search-input').value;
     if (!inpVal) return;
     locService.getSearchLoc(inpVal)
-        .then(mapService.panTo)
-
-
-
-
-
+        .then(loc => {
+            mapService.panTo(loc);
+            locService.addLocToTable(loc.lat,loc.lng);
+            renderLocationsTable();
+        })
     document.querySelector('.search-input').value = '';
 
 }
