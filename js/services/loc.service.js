@@ -2,7 +2,8 @@ import { storeService } from '/js/services/storage.service.js'
 
 export const locService = {
     getLocs,
-    addLocToTable
+    addLocToTable,
+    deleteLoc
 }
 
 const KEY = 'locationsDB'
@@ -39,4 +40,10 @@ function getLocs() {
             resolve(gLocs);
         }, 2000)
     });
+}
+
+
+function deleteLoc(idx) {
+    gLocs.splice(idx, 1);
+    storeService.saveToStorage(KEY, gLocs);
 }

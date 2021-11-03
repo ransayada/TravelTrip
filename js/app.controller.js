@@ -6,6 +6,9 @@ window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
+window.onMarkLoc = onMarkLoc;
+window.onGoLoc = onGoLoc;
+window.onDeleteLoc = onDeleteLoc;
 
 function onInit() {
     mapService.initMap()
@@ -67,23 +70,38 @@ function renderLocationsTable() {
                 var name = location.name;
                 var lat = location.lat;
                 var lng = location.lng;
-                strHTML += `<td>${i}</td><td>${name}</td> <td>${lat}</td><td>${lng}</td> <td><button onclick="onGoLoc()" class="btn-go-locs">Go</button><button onclick="onDeleteLoc()" class="btn-delete-locs">X</button><button onclick="onMarkLoc()" class="btn-mark-locs">📍</button></td></tr>`;
+                strHTML += `<td>${i}</td><td>${name}</td> <td>${lat}</td><td>${lng}</td> <td><button onclick="onGoLoc(${i})" class="btn-go-locs">Go</button><button onclick="onDeleteLoc(${i})" class="btn-delete-locs">X</button><button onclick="onMarkLoc(${i})" class="btn-mark-locs">📍</button></td></tr>`;
             }
             strHTML += `</tbody></table>`;
             document.querySelector('.locations-container').innerHTML = strHTML;
         })
 }
 
-function onMarkLoc() {
+function onMarkLoc(idx) {
     console.log('mark this location...');
+    locService.getLocs()
+        .then(locs => {
+            var location = locs[idx];
+            var la = location.lat;
+            var ln = location.lng;
+            mapService.addMarker({ lat: la, lng: ln });
+        })
+
 }
 
-function onGoLoc() {
+function onGoLoc(idx) {
     console.log('go to this location...');
-
+    locService.getLocs()
+        .then(locs => {
+            var location = locs[idx];
+            var la = location.lat;
+            var ln = location.lng;
+            mapService.panTo({ lat: la, lng: ln });
+        })
 }
 
-function onDeleteLoc() {
+function onDeleteLoc(idx) {
     console.log(' this location...');
-
+    locService.deleteLoc(idx);
+    renderLocationsTable();
 }
