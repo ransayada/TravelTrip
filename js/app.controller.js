@@ -9,14 +9,31 @@ window.onGetUserPos = onGetUserPos;
 window.onMarkLoc = onMarkLoc;
 window.onGoLoc = onGoLoc;
 window.onDeleteLoc = onDeleteLoc;
+window.onGetLink = onGetLink;
+
+var gLan = '';
+var gLon = '';
 
 function onInit() {
-    mapService.initMap()
-        .then(() => {
-            console.log('Map is ready');
+    getPosition()
+        .then(pos => {
+            const url = new URL(window.location.href);
+            let searchParams = new URLSearchParams(url.search);
+            if (searchParams.has('lat') && searchParams.has('lon')) {
+                gLan = searchParams.get('lat');
+                gLon = searchParams.get('lon');
+            } else {
+                gLan = pos.coords.latitude;
+                gLon = pos.coords.longitude;
+            }
+            mapService.initMap(gLan, gLon)
+                .then(() => {
+                    console.log('Map is ready');
+                })
+                .catch(() => console.log('Error: cannot init map'));
         })
-        .catch(() => console.log('Error: cannot init map'));
 }
+
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
@@ -104,4 +121,18 @@ function onDeleteLoc(idx) {
     console.log(' this location...');
     locService.deleteLoc(idx);
     renderLocationsTable();
+}
+
+
+function onGetLink() {
+    getPosition()
+        .then(pos => {
+            gLan = pos.coords.latitude;
+            gLon = pos.coords.longitude;
+            renderLink();
+        })
+}
+
+function renderLink() {
+    document.querySelector('.link').innerText = `https://ransayada.github.io/TravelTrip/?lan=${gLan}&lon=${gLon}/`;
 }
