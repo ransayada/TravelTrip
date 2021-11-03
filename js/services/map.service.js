@@ -49,3 +49,18 @@ function _connectGoogleApi() {
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
 }
+
+// //TODO:change
+// function _connectGoogleApi() {
+//     if (window.google) return Promise.resolve()
+//     const API_KEY = 'AIzaSyAyXEvAzKdfmY-a06sPP8K9CECxLBYaO_o';
+//     var elGoogleGeoCodeApi = document.createElement('script');
+//     elGoogleGeoCodeApi.src = `https://maps.googleapis.com/maps/api/geocode/json?address=${search_res}&key=${API_KEY}`;
+//     elGoogleGeoCodeApi.async = true;
+//     document.body.append(elGoogleGeoCodeApi);
+
+//     return new Promise((resolve, reject) => {
+//         elGoogleGeoCodeApi.onload = resolve;
+//         elGoogleGeoCodeApi.onerror = () => reject('Google script failed to load')
+//     })
+// }
