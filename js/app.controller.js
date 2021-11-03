@@ -10,6 +10,8 @@ window.onMarkLoc = onMarkLoc;
 window.onGoLoc = onGoLoc;
 window.onDeleteLoc = onDeleteLoc;
 window.onGetLink = onGetLink;
+window.onGo = onGo;
+
 
 var gLan = '';
 var gLon = '';
@@ -105,6 +107,23 @@ function onMarkLoc(idx) {
         })
 
 }
+
+
+//go using search
+function onGo() {
+    var inpVal = document.querySelector('.search-input').value;
+    if (!inpVal) return;
+    locService.getSearchLoc(inpVal)
+        .then(mapService.panTo)
+
+
+
+
+
+    document.querySelector('.search-input').value = '';
+
+}
+
 
 function onGoLoc(idx) {
     console.log('go to this location...');

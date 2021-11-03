@@ -3,7 +3,8 @@ import { storeService } from './storage.service.js'
 export const locService = {
     getLocs,
     addLocToTable,
-    deleteLoc
+    deleteLoc,
+    getSearchLoc
 }
 
 const KEY = 'locationsDB'
@@ -13,6 +14,17 @@ var gLocs = [
     { name: 'Greatplace', lat: 32.047104, lng: 34.832384 },
     { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
 ]
+
+function getSearchLoc(searchVal){
+    const API_KEY='AIzaSyAyXEvAzKdfmY-a06sPP8K9CECxLBYaO_o';
+    var prm = axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${searchVal}&key=${API_KEY}`)
+    return prm.then(res=> res.data['results'][0])
+    .then(loc => 
+        loc['geometry'])
+    .then(res => {
+        return res['location']
+    })
+} 
 
 function addLocToTable(la, lo) {
     var locs = storeService.loadFromStorage(KEY);
