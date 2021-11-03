@@ -4,6 +4,8 @@ export const mapService = {
     panTo
 }
 
+import { locService } from './loc.service.js'
+import { appController } from '../app.controller.js'
 var gMap;
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
@@ -13,10 +15,31 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
             console.log('google available');
             gMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                    center: { lat, lng },
-                    zoom: 15
-                })
+                center: { lat, lng },
+                zoom: 15
+            })
+
+
             console.log('Map!', gMap);
+
+
+            let infoWindow = new google.maps.InfoWindow();
+
+            gMap.addListener("click", (mapsMouseEvent) => {
+                // Close the current InfoWindow.
+                infoWindow.close();
+                // Create a new InfoWindow.
+                infoWindow = new google.maps.InfoWindow({
+                    position: mapsMouseEvent.latLng,
+                });
+                infoWindow.setContent(
+                    JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+                );
+                infoWindow.open(gMap);
+
+                locService.addLocToTable(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng())
+                appController.renderLocationsTable();
+            });
         })
 }
 
@@ -33,6 +56,10 @@ function panTo(lat, lng) {
     var laLatLng = new google.maps.LatLng(lat, lng);
     gMap.panTo(laLatLng);
 }
+
+
+
+
 
 
 

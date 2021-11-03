@@ -1,6 +1,8 @@
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
-
+export const appController = {
+    renderLocationsTable
+}
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
@@ -54,7 +56,8 @@ function onGetLocs() {
     locService.getLocs()
         .then(locs => {
             console.log('Locations:', locs)
-            document.querySelector('.locs').innerText = JSON.stringify(locs)
+            // document.querySelector('.locs').innerText = JSON.stringify(locs)
+            renderLocationsTable()
         })
 }
 
@@ -64,6 +67,8 @@ function onGetUserPos() {
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
+                mapService.panTo(pos.coords.latitude,pos.coords.longitude)
+                mapService.addMarker({ lat: pos.coords.latitude, lng: pos.coords.longitude });
             locService.addLocToTable(pos.coords.latitude, pos.coords.longitude);
             renderLocationsTable();
         })
@@ -147,10 +152,12 @@ function onGetLink() {
         .then(pos => {
             gLan = pos.coords.latitude;
             gLon = pos.coords.longitude;
-            renderLink();
+            copyLocation();
         })
 }
 
-function renderLink() {
-    document.querySelector('.link').innerText = `https://ransayada.github.io/TravelTrip/?lan=${gLan}&lon=${gLon}/`;
+function copyLocation() {
+    var url = `https://ransayada.github.io/TravelTrip/?lan=${gLan}&lon=${gLon}/`;
+    // document.querySelector('.link').innerText = url;
+    navigator.clipboard.writeText(url);
 }

@@ -8,3 +8,38 @@ html {
 .flex {
     display: flex;
 }
+
+.header-container{
+    justify-content: center;
+    align-items: center;
+
+}
+
+.search-input{
+    border-radius: 25px;
+}
+
+button{
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+button:hover{
+    background-color: coral;
+}
+
+.locations-container{
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.map-buttons{
+    justify-content: center;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid purple;
+  }
