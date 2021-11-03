@@ -42,9 +42,8 @@ function onGetUserPos() {
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
-            var locs = locService.addLocToTable(pos.coords.latitude, pos.coords.longitude);
-            console.log('locs', locs)
-            renderLocationsTable(locs);
+            locService.addLocToTable(pos.coords.latitude, pos.coords.longitude);
+            renderLocationsTable();
         })
         .catch(err => {
             console.log('err!!!', err);
@@ -56,6 +55,35 @@ function onPanTo() {
     mapService.panTo(35.6895, 139.6917);
 }
 
-function renderLocationsTable(locs) {
+function renderLocationsTable() {
     console.log('rendering locations...');
+    locService.getLocs()
+        .then(locs => {
+            console.log('~ locs', locs)
+            var strHTML = `<table class="table" border="1"><tbody><th data-trans="id" > id </th><th data-trans="name" > Name </th><th data-trans="lat"> Lat </th><th data-trans="lng"> Lat </th> <th data-trans="Actions"> Actions </th>`;
+            for (let i = 0; i < locs.length; i++) {
+                strHTML += `<tr>`;
+                var location = locs[i];
+                var name = location.name;
+                var lat = location.lat;
+                var lng = location.lng;
+                strHTML += `<td>${i}</td><td>${name}</td> <td>${lat}</td><td>${lng}</td> <td><button onclick="onGoLoc()" class="btn-go-locs">Go</button><button onclick="onDeleteLoc()" class="btn-delete-locs">X</button><button onclick="onMarkLoc()" class="btn-mark-locs">📍</button></td></tr>`;
+            }
+            strHTML += `</tbody></table>`;
+            document.querySelector('.locations-container').innerHTML = strHTML;
+        })
+}
+
+function onMarkLoc() {
+    console.log('mark this location...');
+}
+
+function onGoLoc() {
+    console.log('go to this location...');
+
+}
+
+function onDeleteLoc() {
+    console.log(' this location...');
+
 }
